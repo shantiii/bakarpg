@@ -3,7 +3,11 @@ require 'sinatra/base'
 require 'em-websocket'
 require 'json'
 require 'thin'
+require 'yaml'
 require 'cgi' #escaping HTML
+
+config_file = ARGV[0] || File.join(File.dirname(__FILE__), "configuration.yml")
+config = YAML.load_file(config_file)
 
 class ApplicationError < StandardError
   def initialize(message)
@@ -55,7 +59,7 @@ EventMachine.run do
   @channel = EventMachine::Channel.new
   @names = {}
 
-  EventMachine::WebSocket.start(host: '0.0.0.0', port: 8080, debug: true) do |socket|
+  EventMachine::WebSocket.start(host: '0.0.0.0', port: config['websocket_port'], debug: true) do |socket|
     socket.onopen do |handshake|
       pp handshake
       sid = @channel.subscribe do |msg|

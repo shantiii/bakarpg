@@ -102,8 +102,7 @@ function proc_message(evt) {
 var chatSocket = null;
 
 function initWebSocket() {
-  var socketUri = "ws://localhost:8080";
-  var socket = new WebSocket(socketUri);
+  var socket = new WebSocket(getServerConfig().socketUri);
   socket.onopen = function (evt) {proc_open(evt);}
   socket.onclose = function (evt) {proc_close(evt);}
   socket.onerror = function (evt) {proc_error(evt);}

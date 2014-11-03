@@ -1,0 +1,2 @@
+websocket_port: 3334
+websocket_host: 'localhost'
