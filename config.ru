@@ -2,7 +2,7 @@ require 'sinatra/base'
 
 class SinatraApp < Sinatra::Base
   get '/' do
-    haml 'index.html'
+    send_file 'public/chat.html'
   end
 end
 
