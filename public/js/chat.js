@@ -74,6 +74,14 @@ function proc_message(evt) {
           updateUsers(localUserlist);
         }
         break;
+      case "rename":
+        serverNotice(msg.old + " is now known as " + msg.new);
+        var nickIndex = localUserlist.indexOf(msg.old);
+        if (nickIndex != -1) {
+          localUserlist[nickIndex] = msg.new;
+          updateUsers(localUserlist);
+        }
+        break;
       case "error":
         serverNotice(msg.message);
         break;
@@ -103,9 +111,18 @@ function initWebSocket() {
   chatSocket = socket;
 }
 
+function requestUserlist() {
+  chatSocket.send(JSON.stringify({type:"userlist"}));
+}
+
 function sendChatMessage() {
   var message = $("#chat-textbox").val();
-  chatSocket.send(JSON.stringify({type:"chat", message: message}));
+  var nickMatches = (/^\/nick\s+(.+?)\s*$/).exec(message);
+  if (nickMatches != null) {
+    chatSocket.send(JSON.stringify({type:"nick", nick: nickMatches[1]}));
+  } else {
+    chatSocket.send(JSON.stringify({type:"chat", message: message}));
+  }
   $("#chat-textbox").val("");
 }
 

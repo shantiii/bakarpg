@@ -70,11 +70,11 @@ EventMachine.run do
         begin
           msg = JSON.parse(jsonmsg)
         socket.send_text error_rsp("Not a valid request.") if msg.nil?
-        msg['message'] = CGI.escapeHTML(msg['message'])
+        msg['message'] = CGI.escapeHTML(msg['message']) unless msg['message'].nil?
         response = case(msg['type'])
                    when 'nick'
                      oldname = @names[sid]
-                     @names[sid] = msg['nick']
+                     @names[sid] = CGI.escapeHTML(msg['nick'])
                      renamed(oldname, @names[sid])
                    when 'chat' then chat(@names[sid], msg['message'])
                    when 'emote' then emote(@names[sid], msg['message'])
