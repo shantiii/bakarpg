@@ -1,7 +1,9 @@
-function updateUsers(users) {
+var localUserlist = [];
+
+function updateUsers() {
   var userlistHTML = [];
-  for(var user in users) {
-    userlistHTML.push('<li>'+users[user]+'</li>');
+  for(var user in localUserlist) {
+    userlistHTML.push('<li>'+localUserlist[user]+'</li>');
   }
   $('#user-list').html(userlistHTML.join(""));
 }
@@ -48,7 +50,8 @@ function proc_message(evt) {
     var msg = JSON.parse(evt.data);
     switch(msg.type) {
       case "userlist":
-        updateUsers(msg.nicks);
+        localUserlist = msg.nicks;
+        updateUsers(localUserlist);
         break;
       case "id":
         chatNick = msg.nick;
@@ -59,10 +62,17 @@ function proc_message(evt) {
           serverNotice("You have joined the room.");
         } else {
           serverNotice(msg.nick + " has joined the room.");
+          localUserlist.push(msg.nick);
+          updateUsers(localUserlist);
         }
         break;
       case "leave":
         serverNotice(msg.nick + " has left the room.");
+        var nickIndex = localUserlist.indexOf(msg.nick);
+        if (nickIndex != -1) {
+          localUserlist.splice(nickIndex, 1);
+          updateUsers(localUserlist);
+        }
         break;
       case "error":
         serverNotice(msg.message);
