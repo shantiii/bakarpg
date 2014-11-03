@@ -117,6 +117,9 @@ function requestUserlist() {
 
 function sendChatMessage() {
   var message = $("#chat-textbox").val();
+  if (message === "") {
+    return;
+  }
   var nickMatches = (/^\/nick\s+(.+?)\s*$/).exec(message);
   if (nickMatches != null) {
     chatSocket.send(JSON.stringify({type:"nick", nick: nickMatches[1]}));
