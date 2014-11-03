@@ -1,0 +1,140 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Foundation Template | Blog</title>
+<meta name="description" content="Documentation and reference library for ZURB Foundation. JavaScript, CSS, components, grid and more."/>
+<meta name="author" content="ZURB, inc. ZURB network also includes zurb.com"/>
+<meta name="copyright" content="Shanti Chellaram, Copyright (c) 2014"/>
+<link rel="stylesheet" href="/css/foundation.css"/>
+<script src="/js/jquery.js"></script>
+<script src="/js/modernizr.js"></script>
+<script src="/js/foundation.min.js"></script>
+<script>
+if (Modernizr.localstorage) {
+  console.log("hi");
+  window.addEventListener("storage", function (e) {
+      console.log(e);
+      $(".nameText").text(e.newValue);
+      return true;
+      }, false);
+}
+</script>
+<script src="/js/chat.js"></script>
+</head>
+<body>
+
+<div class="row">
+  <div class="large-12 columns">
+    <div class="nav-bar right">
+      <ul class="button-group">
+        <li><a href="#" class="button">Link 1</a></li>
+        <li><a href="#" class="button">Link 2</a></li>
+        <li><a href="#" class="button">Link 3</a></li>
+        <li><a href="#" class="button">Link 4</a></li>
+      </ul>
+    </div>
+    <h1>RPG Chat<small>help</small></h1>
+    <hr/>
+  </div>
+</div>
+
+
+<div class="row">
+
+  <div class="large-9 columns" role="content">
+    <article>
+      <h6>Last Message at <span class="last-message-timestamp-span"></span></h6>
+      <dl class="tabs" data-tab>
+        <dd class="active"><a href="#mainpanel">Main</a></dd>
+        <dd><a href="#gamepanel">Game</a></dd>
+        <dd><a href="#oocpanel">OOC</a></dd>
+        <dd><a href="#rollspanel">Rolls</a></dd>
+      </dl>
+      <div id="game-chat-div" class="row panel">
+        <div class="tabs-content">
+          <div class="content active" id="mainpanel">
+            <ul id="main-chat-ul">
+              <li>Begin chat.</li>
+            </ul>
+          </div>
+          <div class="content" id="gamepanel">
+            <p>This is the second panel of the basic tab example. This is the second panel of the basic tab example.</p>
+          </div>
+          <div class="content" id="oocpanel">
+            <p>This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p>
+          </div>
+          <div class="content" id="rollspanel">
+            <p>This is the fourth panel of the basic tab example. This is the fourth panel of the basic tab example.</p>
+          </div>
+        </div>
+      </div>
+      <hr/>
+      <form action="javascript:;">
+        <div class="row collapse">
+          <div id="chat-input" class="medium-11 columns">
+            <input type="text" id="chat-textbox" />
+          </div>
+          <div class="medium-1 columns">
+            <input type="submit" class="postfix button success" value="Send" onsubmit="" onclick="javascript:sendChatMessage();"/>
+          </div>
+        </div>
+      </form>
+    </article>
+  </div>
+
+
+  <aside class="large-3 columns">
+    <h5>Users</h5>
+    <ul id="user-list" class="side-nav">
+    </ul>
+    <div class="panel">
+      <h5>Files</h5>
+      <img src="http://placehold.it/60x80&text=[file]"/>
+      
+      <a class="button tiny" href="#">Download</a>
+      <p> Brief description of file </p>
+    </div>
+  </aside>
+
+</div>
+
+
+<footer class="row">
+  <div class="large-12 columns">
+    <hr/>
+    <div class="row">
+      <div class="large-6 columns">
+        <p>&copy; 2014 Shanti Chellaram</p>
+      </div>
+      <div class="large-6 columns">
+        <ul class="inline-list right">
+          <li><a href="#">Link 1</a></li>
+          <li><a href="#">Link 2</a></li>
+          <li><a href="#">Link 3</a></li>
+          <li><a href="#">Link 4</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<script>
+$(document).foundation();
+</script>
+<script>
+document.write('<script src=js/vendor/' +
+    ('__proto__' in {} ? 'zepto' : 'jquery') +
+    '.js><\/script>')
+</script>
+<script src="/js/jquery.js"></script>
+<script src="/js/foundation.min.js"></script>
+<script>
+$(document).foundation();
+
+      var doc = document.documentElement;
+      doc.setAttribute('data-useragent', navigator.userAgent);
+    </script>
+</body>
+</html>
