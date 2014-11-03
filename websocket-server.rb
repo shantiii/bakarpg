@@ -72,8 +72,10 @@ EventMachine.run do
         msg['message'] = CGI.escapeHTML(msg['message']) unless msg['message'].nil?
         response = case(msg['type'])
                    when 'nick'
+                     potential_nick = CGI.escapeHTML(msg['nick'])
+                     raise ApplicationError.new("Nick is already taken.") if @names.values.include? potential_nick
                      oldname = @names[sid]
-                     @names[sid] = CGI.escapeHTML(msg['nick'])
+                     @names[sid] = potential_nick
                      renamed(oldname, @names[sid])
                    when 'chat' then chat(@names[sid], msg['message'])
                    when 'emote' then emote(@names[sid], msg['message'])
