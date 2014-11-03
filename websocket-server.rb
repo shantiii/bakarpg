@@ -1,5 +1,4 @@
 require 'pp'
-require 'redis'
 require 'sinatra/base'
 require 'em-websocket'
 require 'json'

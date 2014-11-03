@@ -1,5 +1,4 @@
 require 'sinatra/base'
-require 'rack/websocket'
 
 class SinatraApp < Sinatra::Base
   get '/' do
