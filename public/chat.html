@@ -43,32 +43,34 @@ if (Modernizr.localstorage) {
 
 
 <div class="row">
-
   <div class="large-9 columns" role="content">
     <article>
-      <h6>Last Message at <span class="last-message-timestamp-span"></span></h6>
       <dl class="tabs" data-tab>
         <dd class="active"><a href="#mainpanel">Main</a></dd>
         <dd><a href="#gamepanel">Game</a></dd>
         <dd><a href="#oocpanel">OOC</a></dd>
         <dd><a href="#rollspanel">Rolls</a></dd>
       </dl>
-      <div id="game-chat-div" class="row panel">
-        <div class="tabs-content">
-          <div class="content active" id="mainpanel">
-            <ul id="main-chat-ul">
-              <li>Begin chat.</li>
-            </ul>
-          </div>
-          <div class="content" id="gamepanel">
-            <p>This is the second panel of the basic tab example. This is the second panel of the basic tab example.</p>
-          </div>
-          <div class="content" id="oocpanel">
-            <p>This is the third panel of the basic tab example. This is the third panel of the basic tab example.</p>
-          </div>
-          <div class="content" id="rollspanel">
-            <p>This is the fourth panel of the basic tab example. This is the fourth panel of the basic tab example.</p>
-          </div>
+      <div id="game-chat-div" class="row panel tabs-content">
+        <div class="content active" id="mainpanel">
+          <ul id="main-chat-ul">
+            <li>Begin chat.</li>
+          </ul>
+        </div>
+        <div class="content" id="gamepanel">
+          <ul id="game-chat-ul">
+            <li>Begin in-game chat.</li>
+          </ul>
+        </div>
+        <div class="content" id="oocpanel">
+          <ul id="ooc-chat-ul">
+            <li>Begin ooc chat.</li>
+          </ul>
+        </div>
+        <div class="content" id="rollspanel">
+          <ul id="rolls-chat-ul">
+            <li>No rolls yet.</li>
+          </ul>
         </div>
       </div>
       <hr/>
@@ -84,7 +86,6 @@ if (Modernizr.localstorage) {
       </form>
     </article>
   </div>
-
 
   <aside class="large-3 columns">
     <h5>Users</h5>
