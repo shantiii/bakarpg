@@ -26,7 +26,7 @@ function chatMessage(nick, message) {
 }
 
 function emote(nick, message) {
-  addEntry("message", nick + message);
+  addEntry("message", nick + " " + message);
 }
 
 function proc_error(evt) {
@@ -120,8 +120,11 @@ function sendChatMessage() {
     return;
   }
   var nickMatches = (/^\/nick\s+(.+?)\s*$/).exec(message);
+  var emoteMatches = (/^\/(?:e|me|em(?:ote)?)\s+(.+?)\s*$/).exec(message);
   if (nickMatches != null) {
     chatSocket.send(JSON.stringify({type:"nick", nick: nickMatches[1]}));
+  } else if (emoteMatches != null) {
+    chatSocket.send(JSON.stringify({type:"emote", message: emoteMatches[1]}));
   } else {
     chatSocket.send(JSON.stringify({type:"chat", message: message}));
   }
