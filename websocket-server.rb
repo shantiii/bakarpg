@@ -77,7 +77,7 @@ EventMachine.run do
         response = case(msg['type'])
                    when 'nick'
                      potential_nick = CGI.escapeHTML(msg['nick'])
-                     raise ApplicationError.new("Nick is already taken.") if @names.values.include? potential_nick
+                     raise ApplicationError.new("Nick '#{potential_nick}' is already taken.") if @names.values.include? potential_nick
                      oldname = @names[sid]
                      @names[sid] = potential_nick
                      renamed(oldname, @names[sid])
