@@ -25,6 +25,10 @@ function chatMessage(nick, message) {
   addEntry("message", "<b>&lt;" + nick + "&gt;</b>&nbsp;" + message);
 }
 
+function ooc(nick, message) {
+  addEntry("ooc", "[OOC]<b>&lt;" + nick + "&gt;</b>&nbsp;" + message);
+}
+
 function emote(nick, message) {
   addEntry("message", nick + " " + message);
 }
@@ -88,6 +92,9 @@ function proc_message(evt) {
       case "chat":
         chatMessage(msg.nick, msg.message);
         break;
+      case "ooc":
+        ooc(msg.nick, msg.message);
+        break;
       case "emote":
         emote(msg.nick, msg.message);
         break;
@@ -121,10 +128,13 @@ function sendChatMessage() {
   }
   var nickMatches = (/^\/nick\s+(.+?)\s*$/).exec(message);
   var emoteMatches = (/^\/(?:e|me|em(?:ote)?)\s+(.+?)\s*$/).exec(message);
+  var oocMatches = (/^\/ooc\s+(.+?)\s*$/).exec(message);
   if (nickMatches != null) {
     chatSocket.send(JSON.stringify({type:"nick", nick: nickMatches[1]}));
   } else if (emoteMatches != null) {
     chatSocket.send(JSON.stringify({type:"emote", message: emoteMatches[1]}));
+  } else if (oocMatches != null) {
+    chatSocket.send(JSON.stringify({type:"ooc", message: oocMatches[1]}));
   } else {
     chatSocket.send(JSON.stringify({type:"chat", message: message}));
   }
