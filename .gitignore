@@ -1,0 +1,4 @@
+# Ignore stupid OS X artifacts 
+.DS_Store
+# Ignore actual configuration file
+/configuration.yml
