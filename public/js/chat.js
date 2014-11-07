@@ -10,7 +10,11 @@ function updateUsers() {
 
 function addEntry(queue, message) {
   $('#main-chat-ul').append("<li>" + message + "</li>");
+  var chatDiv = $('#game-chat-div');
   console.log("["+queue+"]: " + message);
+  chatDiv.stop().animate({
+      scrollTop: chatDiv[0].scrollHeight
+  }, 800);
 }
 
 function serverNotice(message) {
