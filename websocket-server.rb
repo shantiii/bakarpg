@@ -6,6 +6,7 @@ require 'thin'
 require 'yaml'
 require 'cgi' #escaping HTML
 require 'redis'
+require 'set'
 
 config_file = ARGV[0] || File.join(File.dirname(__FILE__), "configuration.yml")
 config = YAML.load_file(config_file)
@@ -60,6 +61,13 @@ EventMachine.run do
   @channel = EventMachine::Channel.new
   @names = {}
   @redis = Redis.new
+  @sockets = Set.new
+
+  EventMachine.add_periodic_timer(10) do
+    @sockets.each do |socket|
+      socket.ping if socket.pingable?
+    end
+  end
 
   def push_msg(msg_obj)
     msg_obj[:msgid] = @redis.rpush("campaign:test.log", msg_obj)
@@ -68,6 +76,7 @@ EventMachine.run do
 
   EventMachine::WebSocket.start(host: '0.0.0.0', port: config['websocket_port'], debug: true) do |socket|
     socket.onopen do |handshake|
+      @sockets.add socket
       pp handshake
       sid = @channel.subscribe do |msg|
         socket.send msg
@@ -110,12 +119,14 @@ EventMachine.run do
         @channel.unsubscribe(sid)
         push_msg leave(@names[sid])
         @names.delete sid
+        @sockets.delete socket
       end
 
       socket.onerror do |error|
         @channel.unsubscribe(sid)
         push_msg leave(@names[sid])
         @names.delete sid
+        @sockets.delete socket
         if (error.kind_of?(EventMachine::WebSocket::WebSocketError))
           log(error)
         end
