@@ -8,9 +8,6 @@ require 'json'
 config_file = File.join(File.dirname(__FILE__), "configuration.yml")
 $config = YAML.load_file(config_file)
 
-def authenticate(username, passphrase)
-end
-
 class SinatraApp < Sinatra::Base
   def initialize
     @redis = Redis.new(host: "127.0.0.1", port: 6379)
@@ -18,6 +15,20 @@ class SinatraApp < Sinatra::Base
   end
   # Store login state in sessions
   enable :sessions
+
+  get '/authorization' do
+    out_headers = {}
+    if session[:user].nil?
+      out_headers.merge!( "X-Logged-In" => "no")
+      return [200, out_headers, ""]
+    end
+    out_headers.merge!({
+      "X-Logged-In" => "yes",
+      "X-User-Id" => session[:user][:id],
+      "X-User-Name" => session[:user][:name]})
+    [200, out_headers, ""]
+  end
+
   get '/' do
     send_file 'public/index.html'
   end
