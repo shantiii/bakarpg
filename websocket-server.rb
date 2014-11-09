@@ -57,6 +57,21 @@ def userlist(nicks)
   {type:"userlist", nicks:nicks}
 end
 
+class EmbeddedTcpServer < Thin::Backends::TcpServer
+  def initialize(host, port, options)
+    @options = options
+    super(host,port)
+  end
+  def disconnect
+    super
+    EventMachine.stop
+  end
+  def stop!
+    super
+    EventMachine.stop
+  end
+end
+
 EventMachine.run do
   @channel = EventMachine::Channel.new
   @names = {}
@@ -133,19 +148,22 @@ EventMachine.run do
       end
     end
   end
+
+  class WebApp < Sinatra::Base
+    get '/files' do
+    end
+    get '/files/:category' do
+    end
+    get '/files/:category/:file' do
+    end
+  end
+
+  Thin::Logging.silent = true
+  Thin::Server.start(@host, @port, WebApp, backend: EmbeddedTcpServer)
 end
 
 # option to hide OOC chat
 # suboption for even-your-own
-
-class WebApp < Sinatra::Base
-  get '/files' do
-  end
-  get '/files/:category' do
-  end
-  get '/files/:category/:file' do
-  end
-end
 
 class Campaign
 end
