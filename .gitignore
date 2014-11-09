@@ -2,3 +2,5 @@
 .DS_Store
 # Ignore actual configuration file
 /configuration.yml
+# Vim swap files
+.*.swp
