@@ -10,7 +10,7 @@
 <meta name="copyright" content="Shanti Chellaram, Copyright (c) 2014"/>
 <link rel="stylesheet" href="/css/foundation.css"/>
 <script src="/js/server-config.js"></script>
-<script src="/js/jquery.js"></script>
+<script src="/js/jquery.min.js"></script>
 <script src="/js/modernizr.js"></script>
 <script src="/js/foundation.min.js"></script>
 <script>
@@ -122,21 +122,13 @@ if (Modernizr.localstorage) {
     </div>
   </div>
 </footer>
-<script>
-$(document).foundation();
-</script>
-<script>
-document.write('<script src=js/vendor/' +
-    ('__proto__' in {} ? 'zepto' : 'jquery') +
-    '.js><\/script>')
-</script>
-<script src="/js/jquery.js"></script>
+<script src="/js/jquery.min.js"></script>
 <script src="/js/foundation.min.js"></script>
 <script>
 $(document).foundation();
 
-      var doc = document.documentElement;
-      doc.setAttribute('data-useragent', navigator.userAgent);
-    </script>
+var doc = document.documentElement;
+doc.setAttribute('data-useragent', navigator.userAgent);
+</script>
 </body>
 </html>
