@@ -56,7 +56,6 @@ end
 def userlist(nicks)
   {type:"userlist", nicks:nicks}
 end
-
 class EmbeddedTcpServer < Thin::Backends::TcpServer
   def initialize(host, port, options)
     @options = options
@@ -71,6 +70,46 @@ class EmbeddedTcpServer < Thin::Backends::TcpServer
     EventMachine.stop
   end
 end
+class User
+  VERSION = 1
+  attr :id # Integer: Uniquely identifies this user
+  attr :format_version # Integer: serialization format number
+  attr :revision_id # Integer: Uniquely identifies revision - prevents clobbers
+  attr :name # String: (uniquely) used to refer to this user
+  attr :characters # Set[Character]: The characters that this user has
+end
+
+class Character
+  VERSION = 1
+  attr :id # 
+  attr :format_version # Integer: serialization format number
+  attr :revision_id # Integer: Uniquely identifies revision - prevents clobbers
+  attr :fields # Array[
+end
+
+class Room
+  VERSION = 1 # Structure Layout version
+  attr :id # Integer: a unique identifier for this room
+  attr :format_version # Integer: serialization format number
+  attr :revision_id # Integer: Uniquely identifies revision - prevents clobbers
+  attr :name # String: (unique) the name of the room in the url
+  attr_accessor :title # String: the displayed title of this room
+  attr_accessor :subtitle # String: a short description of this room
+  attr_accessor :gm # User: The founder of this room, has raised permissions
+  attr_accessor :registered_users # Set[User]: Users "known" to this room
+  attr_accessor :anon_lock # Boolean: if set, only registered users can chat in this channel
+  attr_accessor :ic_lock # Boolean: if set, only registered
+
+  def save
+    if @id.nil?
+      # grab an id from redis
+      @format_version = VERSION
+
+    end
+  end
+  def load
+  end
+end
 
 EventMachine.run do
   @channel = EventMachine::Channel.new
@@ -78,7 +117,7 @@ EventMachine.run do
   @redis = Redis.new
   @sockets = Set.new
 
-  EventMachine.add_periodic_timer(10) do
+  EventMachine.add_periodic_timer(config['websocket']['server_ping'] || 10) do
     @sockets.each do |socket|
       socket.ping if socket.pingable?
     end
@@ -89,8 +128,18 @@ EventMachine.run do
     @channel.push(msg_obj.to_json)
   end
 
-  EventMachine::WebSocket.start(host: '0.0.0.0', port: config['websocket_port'], debug: true) do |socket|
+  websocket_options = {
+    host: config['websocket']['listen_host'],
+    port: config['websocket']['listen_port'],
+    debug: true
+  }
+  EventMachine::WebSocket.start(host: config['websocket']['listen_host'], port: config['websocket']['listen_port'], debug: true) do |socket|
     socket.onopen do |handshake|
+      pp handshake
+      cookie_value = handshake.headers['Cookie'].split('=')[1]
+      a = Marshal.load(Rack::Session::Cookie::Base64.new.decode(Rack::Utils.unescape(cookie_value.split('--').first)))
+      pp a
+      puts "hi"
       @sockets.add socket
       pp handshake
       sid = @channel.subscribe do |msg|
@@ -166,6 +215,7 @@ end
 # suboption for even-your-own
 
 class Campaign
+
 end
 
 class CampaignSession

@@ -1,2 +1,32 @@
-websocket_port: 3334
-websocket_host: 'localhost'
+# Configuration Settings for RPG Chat thingy
+# Websocket service configuration.
+websocket:
+  # The interface for the websocket server to listen on.
+  listen_host: '127.0.0.1'
+  # The port for the websocket server to listen on.
+  listen_port: 8080
+  # The URI to externally access the websocket server.
+  service_uri: 'ws://example.org:8080/websocket'
+  # Whether or not to enable SSL/TLS on these (default=false)
+  ssl_enabled: true
+  # In seconds, the interval between the server sending WebSocket PING requests (default=10s)
+  server_ping: 10
+  # File containing the private key to authenticate this connection
+  # Must be valid if ssl_enabled = true
+  private_key_file: '/path/to/example.org.key'
+  # File containing the signed certificate key chain
+  # Must be valid if ssl_enabled = true
+  cert_chain_file: '/path/to/example.org.crt'
+  # Output debugging information. (default=false)
+# Redis store settings.
+redis:
+  # The interface to connect to to access the redis instance.
+  host: '127.0.0.1'
+  # The port to connect to the redis instance.
+  port: 6379
+  # The password to access the redis instance (default: no password)
+  #password: 'mylovelyladylumps'
+  # The database number to connect to (default=0)
+  #db: 0
+  # The database to store all the authentication info in (default: same as db)
+  #auth_db: 1
