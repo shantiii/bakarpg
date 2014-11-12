@@ -1,3 +1,4 @@
+$: << File.join(File.dirname(__FILE__), 'lib')
 require 'pp'
 require 'sinatra/base'
 require 'em-websocket'
@@ -7,6 +8,8 @@ require 'yaml'
 require 'cgi' #escaping HTML
 require 'redis'
 require 'set'
+require 'rpgchat'
+
 
 config_file = ARGV[0] || File.join(File.dirname(__FILE__), "configuration.yml")
 config = YAML.load_file(config_file)
@@ -41,6 +44,10 @@ def renamed(old_nick, new_nick)
   { type:"rename", old:old_nick, new:new_nick }
 end
 
+def roll(nick, value, expr)
+  { type: "roll", nick: nick, roll: value ,expr: expr}
+end
+
 def id(granted_nick)
   { type:"id", nick:granted_nick }
 end
@@ -55,36 +62,6 @@ end
 
 def userlist(nicks)
   {type:"userlist", nicks:nicks}
-end
-class EmbeddedTcpServer < Thin::Backends::TcpServer
-  def initialize(host, port, options)
-    @options = options
-    super(host,port)
-  end
-  def disconnect
-    super
-    EventMachine.stop
-  end
-  def stop!
-    super
-    EventMachine.stop
-  end
-end
-class User
-  VERSION = 1
-  attr :id # Integer: Uniquely identifies this user
-  attr :format_version # Integer: serialization format number
-  attr :revision_id # Integer: Uniquely identifies revision - prevents clobbers
-  attr :name # String: (uniquely) used to refer to this user
-  attr :characters # Set[Character]: The characters that this user has
-end
-
-class Character
-  VERSION = 1
-  attr :id # 
-  attr :format_version # Integer: serialization format number
-  attr :revision_id # Integer: Uniquely identifies revision - prevents clobbers
-  attr :fields # Array[
 end
 
 class Room
@@ -169,6 +146,7 @@ EventMachine.run do
                      when 'chat' then chat(@names[sid], msg['message'])
                      when 'emote' then emote(@names[sid], msg['message'])
                      when 'ooc' then ooc(@names[sid], msg['message'])
+                     when 'roll' then roll(@names[sid], RPGChat::DieRolls.roll(msg['expr']), msg['expr'])
                      else raise ApplicationError.new("Request does not contain a valid message.")
                      end
           push_msg(response)
@@ -208,7 +186,7 @@ EventMachine.run do
   end
 
   Thin::Logging.silent = true
-  Thin::Server.start(@host, @port, WebApp, backend: EmbeddedTcpServer)
+  Thin::Server.start(@host, @port, WebApp, backend: RPGChat::EmbeddedTcpServer)
 end
 
 # option to hide OOC chat

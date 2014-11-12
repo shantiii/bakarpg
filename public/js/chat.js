@@ -82,6 +82,9 @@ function proc_message(evt) {
           updateUsers(localUserlist);
         }
         break;
+      case "roll":
+        serverNotice(msg.nick + " rolled " + msg.roll + " (" + msg.expr + ")" );
+        break;
       case "rename":
         serverNotice(msg.old + " is now known as " + msg.new);
         var nickIndex = localUserlist.indexOf(msg.old);
@@ -133,12 +136,15 @@ function sendChatMessage() {
   var nickMatches = (/^\/nick\s+(.+?)\s*$/).exec(message);
   var emoteMatches = (/^\/(?:e|me|em(?:ote)?)\s+(.+?)\s*$/).exec(message);
   var oocMatches = (/^\/ooc\s+(.+?)\s*$/).exec(message);
+  var rollMatches = (/^\/roll\s+(.+?)\s*$/).exec(message);
   if (nickMatches != null) {
     chatSocket.send(JSON.stringify({type:"nick", nick: nickMatches[1]}));
   } else if (emoteMatches != null) {
     chatSocket.send(JSON.stringify({type:"emote", message: emoteMatches[1]}));
   } else if (oocMatches != null) {
     chatSocket.send(JSON.stringify({type:"ooc", message: oocMatches[1]}));
+  } else if (rollMatches != null) {
+    chatSocket.send(JSON.stringify({type:"roll", expr: rollMatches[1]}));
   } else {
     chatSocket.send(JSON.stringify({type:"chat", message: message}));
   }
