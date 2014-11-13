@@ -1,0 +1,103 @@
+<!doctype html>
+<!--[if IE 9]><html class="lt-ie10" lang="en" > <![endif]-->
+<html class="no-js" lang="en" data-useragent="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.2; Trident/6.0)">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title><%= title %></title>
+<meta name="description" content="A dinky little RPG chat engine thing made mostly for funsies." />
+<meta name="author" content="Shanti Chellaram"/>
+<meta name="copyright" content="Shanti Chellaram, Copyright (c) 2014"/>
+<link rel="stylesheet" href="/css/foundation.css"/>
+<script src="/js/server-config.js"></script>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/modernizr.js"></script>
+<script src="/js/foundation.min.js"></script>
+<script src="/js/chat.js"></script>
+</head>
+<body>
+
+<div class="row">
+  <div class="large-12 columns">
+    <div class="nav-bar right">
+      <ul class="button-group">
+        <% if logged_in? %>
+          <li><a href="/me" class="button"><%= username %></a></li>
+        <% else %>
+          <li><a class="button" data-reveal-id="login-modal">Sign In</a></li>
+        <% end %>
+        <li><a href="/characters" class="button">My Characters</a></li>
+        <li><a href="/campaigns" class="button">My Campaigns</a></li>
+        <li><a href="/archives" class="button">Archives</a></li>
+      </ul>
+    </div>
+    <h1>BakaRPG&nbsp;<small>alpha</small></h1>
+    <hr/>
+  </div>
+</div>
+
+<div id="login-modal" class="reveal-modal tiny remove-whitespace" data-reveal>
+  <div class="row">
+    <div class="large-12 columns auth-plain">
+      <div class="signup-panel">
+        <h3 class="center">Registered Users</h3>
+        <form>
+          <fieldset>
+          <div class="row collapse">
+            <div class="small-2  columns">
+              <span class="prefix"><i class="fi-torso-female"></i></span>
+            </div>
+            <div class="small-10  columns">
+              <input type="text" placeholder="username">
+            </div>
+          </div>
+          <div class="row collapse">
+            <div class="small-2 columns ">
+              <span class="prefix"><i class="fi-lock"></i></span>
+            </div>
+            <div class="small-10 columns ">
+              <input type="text" placeholder="password">
+            </div>
+          </div>
+        </fieldset>
+        </form>
+        <a href="#" class="button left">Log In </a>
+        <a href="#" class="button right">Sign Up</a>
+      </div>
+    </div>
+  </div>
+  <a class="close-reveal-modal">&#215;</a>
+</div>   
+
+<div class="row">
+  <%= yield %>
+</div>
+
+<footer class="row">
+  <div class="large-12 columns">
+    <hr/>
+    <div class="row">
+      <div class="large-6 columns">
+        <p>&copy; 2014 Shanti Chellaram</p>
+      </div>
+      <div class="large-6 columns">
+        <ul class="inline-list right">
+          <li><a href="#">Link 1</a></li>
+          <li><a href="#">Link 2</a></li>
+          <li><a href="#">Link 3</a></li>
+          <li><a href="#">Link 4</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
+<script src="/js/jquery.min.js"></script>
+<script src="/js/foundation.min.js"></script>
+<script>
+$(document).foundation();
+
+var doc = document.documentElement;
+doc.setAttribute('data-useragent', navigator.userAgent);
+</script>
+</body>
+</html>

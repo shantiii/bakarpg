@@ -68,6 +68,7 @@ function proc_message(evt) {
       case "join":
         if (msg.nick == chatNick) {
           serverNotice("You have joined the room.");
+          requestUserlist();
         } else {
           serverNotice(msg.nick + " has joined the room.");
           localUserlist.push(msg.nick);

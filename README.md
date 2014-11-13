@@ -1,4 +1,4 @@
 #Instructions
 
-ruby websocket-server.rb
-rackup -p 4567
+cp configuration.yml.example configuration.yml
+ruby webapp.rb
