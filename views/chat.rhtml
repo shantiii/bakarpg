@@ -42,4 +42,8 @@
       <p> Brief description of file </p>
     </div>
   </aside>
+  <script src="/js/chat.js"></script>
+  <script>
+  window.addEventListener("load", initWebSocket("<%= @config.websocket.uri + "rooms/#{my_room}"%>"), false)
+  </script>
 </div>

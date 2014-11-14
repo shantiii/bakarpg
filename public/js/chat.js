@@ -116,8 +116,8 @@ function proc_message(evt) {
 }
 var chatSocket = null;
 
-function initWebSocket() {
-  var socket = new WebSocket(getServerConfig().socketUri);
+function initWebSocket(uri) {
+  var socket = new WebSocket(uri);
   socket.onopen = function (evt) {proc_open(evt);}
   socket.onclose = function (evt) {proc_close(evt);}
   socket.onerror = function (evt) {proc_error(evt);}
@@ -152,4 +152,3 @@ function sendChatMessage() {
   $("#chat-textbox").val("");
 }
 
-window.addEventListener("load", initWebSocket(), false);
