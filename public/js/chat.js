@@ -137,7 +137,7 @@ function sendChatMessage() {
   var nickMatches = (/^\/nick\s+(.+?)\s*$/).exec(message);
   var emoteMatches = (/^\/(?:e|me|em(?:ote)?)\s+(.+?)\s*$/).exec(message);
   var oocMatches = (/^\/ooc\s+(.+?)\s*$/).exec(message);
-  var rollMatches = (/^\/roll\s+(.+?)\s*$/).exec(message);
+  var rollMatches = (/^\/roll\s*(.*?)\s*$/).exec(message);
   if (nickMatches != null) {
     chatSocket.send(JSON.stringify({type:"nick", nick: nickMatches[1]}));
   } else if (emoteMatches != null) {

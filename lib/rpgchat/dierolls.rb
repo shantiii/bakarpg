@@ -68,7 +68,9 @@ module RPGChat
            op: simple(:op)) { BinaryExpr.new(lhs, op, rhs) }
     end
 
-    def self.roll(str = "dX")
+    def self.roll(str = "", default = "dX")
+      str ||= ""
+      str = default if str.strip.empty?
       dp = DieParser.new
       dt = DieTransform.new
       dt.apply(dp.parse(str)).eval
