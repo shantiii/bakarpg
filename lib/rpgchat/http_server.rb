@@ -57,10 +57,7 @@ module RPGChat
 
     get '/rooms/:room' do
       # TODO: set up room model here
-    end
-
-    get '/chat' do
-      erb :chat, locals:{title: "Chat Page!"}
+      erb :chat, locals:{title: "Chat Page!", my_room: params[:room], my_room_desc: "Some more text"}
     end
 
     post '/register' do

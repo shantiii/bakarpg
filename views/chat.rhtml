@@ -1,14 +1,21 @@
 <div class="row">
   <div class="large-9 columns" role="content">
-    <h1>room.name</h1>
+    <h1><%= my_room %></h1>
+    <blockquote id="room-topic"><%= my_room_desc %></blockquote>
     <article>
-      <div id="game-chat-div" class="row panel tabs-content scrollable">
+      <div id="game-chat-div" class="row panel scrollable">
         <div class="content active" id="mainpanel">
           <ul class="no-bullet no-margin" id="main-chat-ul">
             <li>Begin chat.</li>
           </ul>
         </div>
       </div>
+      <dl id="display-toggle" class="no-margin sub-nav">
+        <dt>Display:</dt>
+        <dd class="active"><a href="#">In-Game</a></dd>
+        <dd><a href="#">OOC</a></dd>
+        <dd><a href="#">Rolls</a></dd>
+      </dl>
       <hr/>
       <form action="javascript:;">
         <div class="row collapse">
