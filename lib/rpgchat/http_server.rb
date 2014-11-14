@@ -5,6 +5,7 @@ require 'json'
 
 module RPGChat
   class HttpServer < Sinatra::Base
+    enable :logging
 
     helpers do 
       def logged_in?
@@ -19,11 +20,11 @@ module RPGChat
     def initialize(appfile, config)
       puts "HELLO"
       settings.app_file = appfile
+      settings.protection = {origin_whitelist: ['http://localhost:8080','http://127.0.0.1:8080']} #TODO: replace with whitelist
       @config = config
       @redis = Redis.new(@config.redis.opts)
       super(config.http.opts)
     end
-    # Store login state in sessions
 
     get '/bleeb' do
       erb :chat, locals: {title: "Bleeb!!"}
@@ -45,13 +46,16 @@ module RPGChat
     get '/' do
       send_file 'public/chat.html'
     end
+
     get '/chat' do
-      send_file 'public/chat.html'
+      erb :chat, locals:{title: "Chat Page!"}
     end
 
     post '/register' do
-      username = request[:username]
-      password = request[:password]
+      return 403, "Already logged in!" if logged_in?
+      json = JSON.parse(request.body.read)
+      username = json['username']
+      password = json['password']
       return 400, "Bad Input" if false #TODO: validate username and password here
       username_valid = @redis.sadd "usernames", username
       return 409, "Username Exists" unless username_valid # If we can't insert this valid username into the set of usernames...
@@ -63,16 +67,23 @@ module RPGChat
     end
 
     post '/login' do
-      #TODO validate username/password here
-      username = request[:username]
+      return 403, "Already logged in!" if logged_in?
+      json = JSON.parse(request.body.read)
+      username = json['username']
+      password = json['password']
       user_id, pass_hash = @redis.hmget "username:#{username}", "user-id", "password-hash"
+      if pass_hash.nil?
+        SCrypt::Password.create("timing attacks are fun") == "timing attacks are fun"
+        return 401, "Invalid data"
+      end
       scrypted_pass = SCrypt::Password.new(pass_hash)
-      return 401, "Invalid Data" if user_id == nil? or scrypted_pass != params[:password]
+      return 401, "Invalid Data" if user_id == nil? or scrypted_pass != password
       session[:user] = {id:user_id, name:username}
       return 200, "Authenticated"
     end
 
     post '/logout' do
+      return 403, "Not logged in!" unless logged_in?
       session[:user] = nil
       return 200, "Logged out"
     end
