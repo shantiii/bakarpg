@@ -48,7 +48,6 @@ module RPGChat
     end
 
     def nicks(room)
-      pp @by_room
       @by_room[room].map{|conn|conn.nick}
     end
   end
@@ -100,7 +99,7 @@ module RPGChat
           user[:name]
         end
       send_json :id, nick:@nick
-      pp @conn_info = ConnectionManager.instance.connect(@room, @token, self)
+      @conn_info = ConnectionManager.instance.connect(@room, @token, self)
       @channel = @conn_info[:channel]
       p "END on_open"
     end
