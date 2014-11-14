@@ -18,9 +18,9 @@ module RPGChat
       @mutex = Mutex.new
       @mutex.synchronize do
         @connections = Hash.new()
-        @channels = Hash.new(EM::Channel.new)
-        @by_room = Hash.new([])
-        @by_cookie = Hash.new([])
+        @channels = Hash.new{|h,k| h[k]= EM::Channel.new}
+        @by_room = Hash.new{|h,k| h[k] = []}
+        @by_cookie = Hash.new{|h,k| h[k] = []}
       end
     end
 
@@ -39,6 +39,7 @@ module RPGChat
     def disconnect(connection)
       @mutex.synchronize do
         conn_info = @connections.delete(connection)
+        return unless conn_info
         @channels[conn_info[:room]].unsubscribe(conn_info[:sub_id])
         conn_info[:channel].push({type: 'leave', nick:connection.nick}) #TODO: make these messages objects
         @by_room[conn_info[:room]].delete(connection)
@@ -80,9 +81,12 @@ module RPGChat
       send_text msg.to_json
     end
 
+    ROOM_REGEX = /^\/ws\/rooms\/([^\/[:cntrl:]]+)$/u
     def on_open(handshake)
       p "BEGIN on_open"
-      handshake
+      room_matches = ROOM_REGEX.match(handshake.path)
+      raise ChatError.new("Invalid room") unless room_matches
+      @room = room_matches[1]
       cookie = CGI::Cookie.parse(handshake.headers['Cookie'])
       raise ChatError.new("You must have cookies enabled for this site in order to participate!") unless cookie
       @token = cookie["poop"].first
@@ -95,7 +99,7 @@ module RPGChat
           user[:name]
         end
       send_json :id, nick:@nick
-      pp @conn_info = ConnectionManager.instance.connect("test", @token, self)
+      pp @conn_info = ConnectionManager.instance.connect(@room, @token, self)
       @channel = @conn_info[:channel]
       p "END on_open"
     end

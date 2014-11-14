@@ -35,7 +35,7 @@ module RPGChat
       settings.protection = {origin_whitelist: ['http://localhost:8080','http://127.0.0.1:8080']} #TODO: replace with whitelist
       @config = config
       @redis = Redis.new(@config.redis.opts)
-      super(config.http.opts)
+      super()
     end
 
     get '/' do
@@ -43,6 +43,7 @@ module RPGChat
     end
 
     get '/me' do
+      redirect '/' unless logged_in?
       redirect "/users/#{username}"
     end
 
