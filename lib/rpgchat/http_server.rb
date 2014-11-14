@@ -52,11 +52,15 @@ module RPGChat
     end
 
     post '/register' do
+      USERNAME_REGEX = /^\w{3,128}$/
+      PASSWORD_MIN = 8
+      PASSWORD_MAX = 4096
       return 403, "Already logged in!" if logged_in?
       json = JSON.parse(request.body.read)
       username = json['username']
       password = json['password']
-      return 400, "Bad Input" if false #TODO: validate username and password here
+      return 400, "Bad Input" unless USERNAME_REGEX.match(username)
+      return 400, "Bad Input" unless password.size.between?(PASSWORD_MIN, PASSWORD_MAX)
       username_valid = @redis.sadd "usernames", username
       return 409, "Username Exists" unless username_valid # If we can't insert this valid username into the set of usernames...
       user_id = @redis.incr "user-ids"
