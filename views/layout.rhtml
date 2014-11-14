@@ -75,7 +75,14 @@
 <script src="/js/jquery.min.js"></script>
 <script src="/js/foundation.min.js"></script>
 <script>
-$(document).foundation();
+$(document).foundation({
+  abide: {
+    patterns:{
+      username: /^.{3,40}$/,
+      password: /^.{8,500}$/
+    }
+  }
+});
 
 var doc = document.documentElement;
 doc.setAttribute('data-useragent', navigator.userAgent);

@@ -81,9 +81,9 @@ module RPGChat
     end
 
     post '/register' do
-      USERNAME_REGEX = /^\w{3,128}$/
+      USERNAME_REGEX = /^\w{3,40}$/
       PASSWORD_MIN = 8
-      PASSWORD_MAX = 4096
+      PASSWORD_MAX = 500
       return 403, "Already logged in!" if logged_in?
       json = JSON.parse(request.body.read)
       username = json['username']
