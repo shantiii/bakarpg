@@ -1,2 +1,37 @@
-<div>
+<div class="row">
+  <div class="small-12 columns">
+    <h3>User</h3>
+    <h1><%=user.name%></h1>
+    <% if not user.visible? %>
+      <h3><small>This user's profile is not visible.</small></h3>
+  <% else %>
+      <p class="lead"><%= user.motto %></p>
+    <h3>Bio</h2>
+    <p>
+    <%= user.bio %>
+    </p>
+    <h3>Characters</h3>
+    <% if user.chars.empty? %>
+      <h3><small><%= user.name %> hasn't created any characters yet.</small></h3>
+  <% else %>
+      <ul class="small-block-grid-1 medium-block-grid-2">
+      <% for char in user.chars %>
+        <li>
+      <div class="radius panel" data-equalizer>
+        <div class="row content">
+          <div class="small-12 columns">
+            <img class="left th" src="<%=char.img%>" data-equalizer-watch />
+            <div class="right" data-equalizer-watch>
+              <h4><%=char.name%></h4>
+              <h4><small><%=char.title%></small></h4>
+            </div>
+          </div>
+        </div>
+      </div>
+      </li>
+    <% end %>
+    </ul>
+    <% end # user.chars.empty? %>
+    <% end #user.visible? %>
+  </div>
 </div>

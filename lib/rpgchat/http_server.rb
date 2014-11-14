@@ -15,6 +15,18 @@ module RPGChat
         if logged_in? then session[:user][:name]
         else nil end
       end
+      def user
+        usr = Struct.new(:name, :motto, :bio, :chars, :visible?).
+          new("simon_belmont", "Good things come on those who wait.",
+             " My god, it's full of stars. And crap. Mostly crap. It's better to have love and lost than never to have loved at all, but it still fuckin smarts.", [], true)
+        haracter = Struct.new(:name, :id, :title, :img)
+        usr.chars << haracter.new("Phage, the Untouchable", 13, "Blackhearted Planeswalking Goddess", "http://lorempixel.com/output/cats-q-c-128-128-1.jpg")
+        usr.chars << haracter.new("Jaina Proudmore", 97, "Sorceress Apprentice, Heiress to the Throne", "http://lorempixel.com/output/cats-q-c-128-128-1.jpg")
+        usr
+      end
+      def title
+        "TODO: Fix Titles" #TODO: Fix Titles
+      end
     end
 
     def initialize(appfile, config)
@@ -45,6 +57,23 @@ module RPGChat
 
     get '/' do
       send_file 'public/chat.html'
+    end
+
+    get '/me' do
+      redirect "/users/#{username}"
+    end
+
+    put '/users/:username' do
+      raise "Not Implemented"
+    end
+
+    get '/users/:username' do
+      # TODO: load user model here, if allowed
+      erb :user
+    end
+
+    get '/rooms/:room' do
+      # TODO: set up room model here
     end
 
     get '/chat' do
