@@ -38,23 +38,6 @@ module RPGChat
       super(config.http.opts)
     end
 
-    get '/bleeb' do
-      erb :chat, locals: {title: "Bleeb!!"}
-    end
-
-    get '/authorization' do
-      out_headers = {}
-      if session[:user].nil?
-        out_headers.merge!( "X-Logged-In" => "no")
-        return [200, out_headers, ""]
-      end
-      out_headers.merge!({
-        "X-Logged-In" => "yes",
-        "X-User-Id" => session[:user][:id],
-        "X-User-Name" => session[:user][:name]})
-      [200, out_headers, ""]
-    end
-
     get '/' do
       send_file 'public/chat.html'
     end
