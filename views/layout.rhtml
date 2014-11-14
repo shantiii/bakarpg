@@ -36,11 +36,9 @@
   </div>
 </div>
 
-<%= erb :login_modal, layout: false %>
+<%= erb :_login_modal, layout: false %>
 
-<div class="row">
-  <%= yield %>
-</div>
+<%= yield %>
 
 <footer class="row">
   <div class="large-12 columns">
