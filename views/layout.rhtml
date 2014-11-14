@@ -10,7 +10,6 @@
 <meta name="copyright" content="Shanti Chellaram, Copyright (c) 2014"/>
 <link rel="stylesheet" href="/css/foundation.css"/>
 <link rel="stylesheet" href="/css/foundation-icons.css"/>
-<script src="/js/server-config.js"></script>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/modernizr.js"></script>
 <script src="/js/foundation.min.js"></script>
@@ -36,7 +35,7 @@
       <li class="has-dropdown">
       <a href="/users/<%=username%>"><%=username%></a>
         <ul class="dropdown">
-          <li><a href="/">Logout</a>
+          <li><a href="/logout">Logout</a>
         </ul>
       </li>
       <% else %>
@@ -52,19 +51,20 @@
 
 <%= yield %>
 
+<hr/>
+
 <footer class="row">
   <div class="large-12 columns">
-    <hr/>
     <div class="row">
       <div class="large-6 columns">
-        <p>&copy; 2014 Shanti Chellaram</p>
+        <p class="copyright">&copy; 2014 Shanti Chellaram. All rights reserved.</p>
       </div>
       <div class="large-6 columns">
         <ul class="inline-list right">
-          <li><a href="#">Link 2</a></li>
-          <li><a href="#">Link 2</a></li>
-          <li><a href="#">Link 3</a></li>
-          <li><a href="#">Link 4</a></li>
+          <li><a href="/">Home</a></li>
+          <li><a href="/about">About</a></li>
+          <li><a href="/privacy">Privacy</a></li>
+          <li><a href="/feedback">Feedback</a></li>
         </ul>
       </div>
     </div>

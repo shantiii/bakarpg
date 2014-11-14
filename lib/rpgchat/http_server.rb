@@ -39,7 +39,23 @@ module RPGChat
     end
 
     get '/' do
-      send_file 'public/chat.html'
+      erb :index
+    end
+
+    get '/about' do
+      erb :about
+    end
+
+    get '/privacy' do
+      erb :privacy
+    end
+
+    get '/contact' do
+      erb :feedback
+    end
+
+    get '/feedback' do
+      erb :feedback
     end
 
     get '/me' do
@@ -59,6 +75,11 @@ module RPGChat
     get '/rooms/:room' do
       # TODO: set up room model here
       erb :chat, locals:{title: "Chat Page!", my_room: params[:room], my_room_desc: "Some more text"}
+    end
+
+    get '/logout' do
+      session[:user] = nil
+      erb :logout
     end
 
     post '/register' do
@@ -102,15 +123,5 @@ module RPGChat
       return 200, "Logged out"
     end
 
-    get "/who" do
-      return "YOU ARE NO ONE" if session[:user].nil?
-      session[:user][:name] 
-    end
-
-    get '/js/server-config.js' do
-      content_type "application/javascript"
-      server_defines = {socketUri: @config.websocket.uri}
-      "function getServerConfig() { return #{server_defines.to_json}; }"
-    end
   end
 end
