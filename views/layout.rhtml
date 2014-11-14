@@ -18,24 +18,36 @@
 </head>
 <body>
 
-<div class="row">
-  <div class="large-12 columns">
-    <div class="nav-bar right">
-      <ul class="button-group">
-        <% if logged_in? %>
-          <li><a href="/me" class="button"><%= username %></a></li>
-        <% else %>
-          <li><a class="button" data-reveal-id="login-modal">Sign In</a></li>
-        <% end %>
-        <li><a href="/characters" class="button">My Characters</a></li>
-        <li><a href="/campaigns" class="button">My Campaigns</a></li>
-        <li><a href="/archives" class="button">Archives</a></li>
+<nav class="top-bar" data-topbar role="navigation">
+  <ul class="title-area">
+    <li class="name"><h1><a href="/">Baka RPG <small>alpha</small></a></h1></li>
+  </ul>
+  <section class="top-bar-section">
+    <ul class="right">
+      <li class="divider"></li>
+      <li class="has-dropdown">
+      <a href="/rooms">Chat Rooms</a>
+      <ul class="dropdown">
+        <li><a href="/rooms/general">#general</a></li>
+        <li><a href="/rooms/myrpg">#myrpg</a></li>
       </ul>
-    </div>
-    <h1>BakaRPG&nbsp;<small>alpha</small></h1>
-    <hr/>
-  </div>
-</div>
+      </li>
+      <li class="divider"></li>
+      <% if logged_in? %>
+      <li class="has-dropdown">
+      <a href="/users/<%=username%>"><%=username%></a>
+        <ul class="dropdown">
+          <li><a href="/">Logout</a>
+        </ul>
+      </li>
+      <% else %>
+      <li class="has-form">
+        <a class="radius button" data-reveal-id="myLoginModal">Login</a>
+      </li>
+      <% end %>
+    </ul>
+  </section>
+</nav>
 
 <%= erb :_login_modal, layout: false %>
 
@@ -50,7 +62,7 @@
       </div>
       <div class="large-6 columns">
         <ul class="inline-list right">
-          <li><a href="#">Link 1</a></li>
+          <li><a href="#">Link 2</a></li>
           <li><a href="#">Link 2</a></li>
           <li><a href="#">Link 3</a></li>
           <li><a href="#">Link 4</a></li>
@@ -59,6 +71,7 @@
     </div>
   </div>
 </footer>
+
 <script src="/js/jquery.min.js"></script>
 <script src="/js/foundation.min.js"></script>
 <script>
