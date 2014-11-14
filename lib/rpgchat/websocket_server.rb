@@ -47,8 +47,9 @@ module RPGChat
       end
     end
 
-    def room_conns(room)
-      @by_room[room]
+    def nicks(room)
+      pp @by_room
+      @by_room[room].map{|conn|conn.nick}
     end
   end
 
@@ -144,7 +145,7 @@ module RPGChat
       # self-commands don't involve any interaction with the room
       # they only query state and are not logged
       case(msg['type'])
-      when "userlist" then send_json :userlist, nicks:ConnectionManager.instance.room_conns(@conn_info[:room]).map{|a|a.nick} # TODO: fix this
+      when "userlist" then send_json :userlist, nicks:ConnectionManager.instance.nicks(@room)
       when 'nick' then rename(msg['nick'])
       when 'chat' then channel_json :chat, nick:@nick, message:msg['message']
       when 'emote' then channel_json :emote, nick:@nick, message:msg['message']
