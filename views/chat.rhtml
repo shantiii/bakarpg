@@ -1,33 +1,16 @@
-<div class="row">
-  <div class="large-9 columns" role="content">
-    <h1><%= my_room %></h1>
-    <blockquote id="room-topic"><%= my_room_desc %></blockquote>
-    <article>
-      <div id="game-chat-div" class="row panel scrollable">
-        <div class="content active" id="mainpanel">
-          <ul class="no-bullet no-margin" id="main-chat-ul">
-            <li>Begin chat.</li>
-          </ul>
-        </div>
-      </div>
-      <dl id="display-toggle" class="no-margin sub-nav">
-        <dt>Display:</dt>
-        <dd class="active"><a href="#">In-Game</a></dd>
-        <dd><a href="#">OOC</a></dd>
-        <dd><a href="#">Rolls</a></dd>
-      </dl>
-      <hr/>
-      <form action="javascript:;">
-        <div class="row collapse">
-          <div id="chat-input" class="medium-11 columns">
-            <input type="text" id="chat-textbox" />
-          </div>
-          <div class="medium-1 columns">
-            <input type="submit" class="postfix button success" value="Send" onsubmit="" onclick="javascript:sendChatMessage();"/>
-          </div>
-        </div>
-      </form>
-    </article>
+<div id="chat-header" class="row">
+  <div class="small-12 large-12 columns" role="content">
+    <h2><%= my_room %>&nbsp;<small><%= my_room_desc %></small></h2>
+  </div>
+</div>
+
+<div id="chat-parent-container" class="row">
+  <div class="large-9 columns"  role="content" id="chat-container">
+      <div id="game-chat-div" class="callout panel" id="chat-panel">
+        <ul class="no-bullet no-margin" id="main-chat-ul">
+          <li>Begin chat.</li>
+        </ul>
+    </div>
   </div>
 
   <aside class="large-3 columns">
@@ -37,13 +20,27 @@
     <div class="panel">
       <h5>Files</h5>
       <img src="http://placehold.it/60x80&text=[file]"/>
-
       <a class="button tiny" href="#">Download</a>
       <p> Brief description of file </p>
     </div>
   </aside>
-  <script src="/js/chat.js"></script>
-  <script>
-  window.addEventListener("load", initWebSocket("<%= @config.websocket.uri + "rooms/#{my_room}"%>"), false)
-  </script>
+
 </div>
+
+<div id="chat-input" class="row">
+  <div class="small-9 columns">
+    <form class="row collapse" action="javascript:sendChatMessage();">
+      <div class="medium-11 columns">
+        <input type="text" id="chat-textbox" />
+      </div>
+      <div class="medium-1 columns">
+        <input type="submit" class="postfix button success" value="Send" />
+      </div>
+    </form>
+  </div>
+</div>
+
+<script src="/js/chat.js"></script>
+<script>
+window.addEventListener("load", initWebSocket("<%= @config.websocket.uri + "rooms/#{my_room}"%>"), false)
+</script>

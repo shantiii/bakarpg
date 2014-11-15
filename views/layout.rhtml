@@ -10,6 +10,7 @@
 <meta name="copyright" content="Shanti Chellaram, Copyright (c) 2014"/>
 <link rel="stylesheet" href="/css/foundation.css"/>
 <link rel="stylesheet" href="/css/foundation-icons.css"/>
+<link rel="stylesheet" href="/css/app.css"/>
 <script src="/js/jquery.min.js"></script>
 <script src="/js/modernizr.js"></script>
 <script src="/js/foundation.min.js"></script>
@@ -32,41 +33,39 @@
       </li>
       <li class="divider"></li>
       <% if logged_in? %>
-      <li class="has-dropdown">
+        <li class="has-dropdown">
       <a href="/users/<%=username%>"><%=username%></a>
-        <ul class="dropdown">
-          <li><a href="/logout">Logout</a>
-        </ul>
+      <ul class="dropdown">
+        <li><a href="/logout">Logout</a>
+      </ul>
       </li>
-      <% else %>
-      <li class="has-form">
-        <a class="radius button" data-reveal-id="myLoginModal">Login</a>
+    <% else %>
+        <li class="has-form">
+      <a class="radius button" data-reveal-id="myLoginModal">Login</a>
       </li>
-      <% end %>
+    <% end %>
     </ul>
   </section>
 </nav>
 
 <%= erb :_login_modal, layout: false %>
 
+<div id="layout-container">
 <%= yield %>
+</div>
 
-<hr/>
-
-<footer class="row">
-  <div class="large-12 columns">
-    <div class="row">
-      <div class="large-6 columns">
-        <p class="copyright">&copy; 2014 Shanti Chellaram. All rights reserved.</p>
-      </div>
-      <div class="large-6 columns">
-        <ul class="inline-list right">
-          <li><a href="/">Home</a></li>
-          <li><a href="/about">About</a></li>
-          <li><a href="/privacy">Privacy</a></li>
-          <li><a href="/feedback">Feedback</a></li>
-        </ul>
-      </div>
+<footer>
+  <div class="row">
+    <div class="large-6 columns">
+      <p class="copyright">&copy; 2014 Shanti Chellaram. All rights reserved.</p>
+    </div>
+    <div class="large-6 columns">
+      <ul class="inline-list right">
+        <li><a href="/">Home</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/privacy">Privacy</a></li>
+        <li><a href="/feedback">Feedback</a></li>
+      </ul>
     </div>
   </div>
 </footer>
@@ -75,12 +74,12 @@
 <script src="/js/foundation.min.js"></script>
 <script>
 $(document).foundation({
-  abide: {
-    patterns:{
-      username: /^.{3,40}$/,
-      password: /^.{8,500}$/
-    }
-  }
+abide: {
+patterns:{
+username: /^.{3,40}$/,
+password: /^.{8,500}$/
+}
+}
 });
 
 var doc = document.documentElement;
