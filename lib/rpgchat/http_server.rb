@@ -106,7 +106,7 @@ module RPGChat
       json = JSON.parse(request.body.read)
       username = json['username']
       password = json['password']
-      user_id, pass_hash = @redis.hmget "username:#{username}", "user-id", "password-hash"
+      user_id, pass_hash = @redis.hmget "user-login:#{username}", "user-id", "password-hash"
       if pass_hash.nil?
         SCrypt::Password.create("timing attacks are fun") == "timing attacks are fun"
         return 401, "Invalid data"
