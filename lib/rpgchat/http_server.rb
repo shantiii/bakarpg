@@ -2,6 +2,7 @@ require 'sinatra/base'
 require 'redis'
 require 'scrypt'
 require 'json'
+require 'rpgchat/redis_dao'
 
 module RPGChat
   class HttpServer < Sinatra::Base
@@ -32,9 +33,10 @@ module RPGChat
     def initialize(appfile, config)
       puts "HELLO"
       settings.app_file = appfile
-      settings.protection = {origin_whitelist: ['http://localhost:8080','http://127.0.0.1:8080']} #TODO: replace with whitelist
+      settings.protection = {origin_whitelist: ['http://localhost:8080','http://127.0.0.1:8080']}
       @config = config
       @redis = Redis.new(@config.redis.opts)
+      @dao = RedisDAO.new(@redis)
       super()
     end
 
@@ -55,12 +57,45 @@ module RPGChat
     end
 
     get '/feedback' do
-      erb :feedback
+      halt 403 if not logged_in?
+      erb :feedback, locals: {dao: @dao}
+    end
+
+    post '/feedback/:item/complete' do
+      halt 403 if not logged_in?
+      halt 403 unless session[:user][:id] == 0
+      @dao.complete params[:item]
+    end
+
+    post '/feedback/:item/unlike' do
+      halt 403 if not logged_in?
+      @dao.unupvote(params[:item], session[:user][:id])
+      [200, '{}']
+    end
+
+    post '/feedback/:item/like' do
+      halt 403 if not logged_in?
+      @dao.unupvote(params[:item], session[:user][:id])
+      [200, '{}']
+    end
+
+    post '/feedback' do
+      halt 403, "Must be logged in to post a comment." if not logged_in?
+      new_item_id = @redis.incr "counter:feedback-items"
+      # request body should be JSON object with 'title' and 'description'
+      obj = JSON.parse(request.body.read) 
+      item = FeedbackItem.new(nil, obj['title'], obj['description'], @dao.user(session[:user][:id]))
+      completed_item = @dao.add_feedback(item)
+      [200, completed_item.to_json]
     end
 
     get '/me' do
       redirect '/' unless logged_in?
       redirect "/users/#{username}"
+    end
+
+    error 400..500 do
+      erb :error
     end
 
     put '/users/:username' do
@@ -112,9 +147,13 @@ module RPGChat
         return 401, "Invalid data"
       end
       scrypted_pass = SCrypt::Password.new(pass_hash)
-      return 401, "Invalid Data" if user_id == nil? or scrypted_pass != password
+      return 401, "Invalid Data" if user_id.nil? or scrypted_pass != password
       session[:user] = {id:user_id, name:username}
       return 200, "Authenticated"
+    end
+
+    before do
+      pp session
     end
 
     post '/logout' do

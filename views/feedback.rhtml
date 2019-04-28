@@ -1,0 +1,48 @@
+<div class="row">
+  <div class="small-12 cols">
+    <h1>Feedback</h1>
+
+    <p> Omg, this site sucks! Tell me how much!! </p>
+
+    <form id="feedback-form" action="#">
+      <label for="feedback-title">Issue</label>
+      <input type="text" id="feedback-title" />
+      <label for="feedback-description">Description</label>
+      <input type="text" id="feedback-description" />
+      <input type="submit" class="button radius" id="feedback-submit" />
+    </form>
+
+    <ul class="small-12 columns small-block-grid-1">
+      <% for item in @dao.popular_feedback(10) %>
+        <li><div id="feedback-panel-<%= item.id %>" class="panel clearfix radius">
+          <% if item.author.id == session[:user][:id] %>
+            <span class="label success right radius"><%= item.votes.to_i %><i class="fa fa-star"></i></span>
+          <%else%>
+            <a class="right" onclick="like_clicked(<%= item.id %>)">
+            <span id="feedback-like-<%= item.id %>" class="label radius">
+              <%= item.votes.to_i %><i class="fa fa-star-o"></i>
+            </span>
+          </a>
+          <%end%>
+        <h4>
+          <%= item.title %><br/>
+          <small>by <%= item.author.login %> at <%= item.created_at.httpdate %></small>
+        </h4>
+        <span class="left"><%= item.description %></span>
+        <div class="right"><%= item.status %></div>
+    </div> </li>
+  <% end %>
+  </ul>
+</div>
+</div>
+
+<script src="/js/feedback.js"></script>
+<script defer>
+var titleField = $('#feedback-title');
+var descField = $('#feedback-description');
+$('#feedback-form').submit(function (evt) {
+    evt.preventDefault();
+    post_feedback(titleField.val(), descField.val());
+    });
+//$('#feedback-').submit(function (evt) {
+</script>

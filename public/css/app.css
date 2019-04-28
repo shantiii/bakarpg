@@ -21,6 +21,7 @@ footer {
   left: 0px;
   right: 0px;
   z-index: 0;
+  overflow-y: scroll;
 }
 
 #chat-header {

@@ -117,6 +117,7 @@ function proc_message(evt) {
 var chatSocket = null;
 
 function initWebSocket(uri) {
+  $('#layout-container').css('overflow-y', 'hidden');
   var socket = new WebSocket(uri);
   socket.onopen = function (evt) {proc_open(evt);}
   socket.onclose = function (evt) {proc_close(evt);}
